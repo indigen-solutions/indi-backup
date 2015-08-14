@@ -3,6 +3,8 @@ INSTALL_DIR=$(DESTDIR)/usr
 BUILD_DIR=./build
 NAME=indi-backup
 LIB_DIR=./lib
+CONFIG_SRC=./exemples/exemple_2.conf
+CONFIG_DEST=$(DESTDIR)/etc/$(NAME).conf
 
 all:
 	mkdir -p $(BUILD_DIR)
@@ -16,9 +18,12 @@ install: all
 
 	cp -r $(LIB_DIR) $(INSTALL_DIR)/lib/$(NAME)
 
+	cp -r $(CONFIG_SRC) $(CONFIG_DEST)
+
 uninstall:
 	rm -rf $(INSTALL_DIR)/bin/$(NAME)
 	rm -rf $(INSTALL_DIR)/lib/$(NAME)
+	rm -rf $(CONFIG_DEST)
 
 clean:
 	rm -rf $(BUILD_DIR)
