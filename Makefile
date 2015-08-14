@@ -14,16 +14,16 @@ install: all
 	mkdir -p $(INSTALL_DIR)/bin
 	mkdir -p $(INSTALL_DIR)/lib/$(NAME)
 	cp $(BUILD_DIR)/$(NAME) $(INSTALL_DIR)/bin
-	chmod 755 $(INSTALL_DIR)/$(NAME)
+	chmod 755 $(INSTALL_DIR)/bin/$(NAME)
 
-	cp -r $(LIB_DIR) $(INSTALL_DIR)/lib/$(NAME)
+	cp -r $(LIB_DIR)/* $(INSTALL_DIR)/lib/$(NAME)
 
-	cp -r $(CONFIG_SRC) $(CONFIG_DEST)
+	( test ! -f $(CONFIG_DEST) && cp $(CONFIG_SRC) $(CONFIG_DEST) ) || cp $(CONFIG_SRC) $(CONFIG_DEST).dist
 
 uninstall:
 	rm -rf $(INSTALL_DIR)/bin/$(NAME)
 	rm -rf $(INSTALL_DIR)/lib/$(NAME)
-	rm -rf $(CONFIG_DEST)
+	rm -rf $(CONFIG_DEST) $(CONFIG_DEST).dist
 
 clean:
 	rm -rf $(BUILD_DIR)
