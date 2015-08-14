@@ -13,6 +13,7 @@ all:
 install: all
 	mkdir -p $(INSTALL_DIR)/bin
 	mkdir -p $(INSTALL_DIR)/lib/$(NAME)
+	mkdir -p $(DESTDIR)/etc
 	cp $(BUILD_DIR)/$(NAME) $(INSTALL_DIR)/bin
 	chmod 755 $(INSTALL_DIR)/bin/$(NAME)
 
