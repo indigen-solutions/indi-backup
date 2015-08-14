@@ -1,3 +1,9 @@
+indi-backup (0.1-4-g955aa64) unstable; urgency=medium
+
+  * Release 0.1-4-g955aa64
+
+ -- Jérôme Quéré <jerome.quere@indigen.com>  Fri, 14 Aug 2015 23:00:46 +0200
+
 indi-backup (0.1-1) unstable; urgency=low
 
   * Initial release
