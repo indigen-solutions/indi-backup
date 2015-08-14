@@ -57,7 +57,6 @@ function ib_task_tarball-incremental_run() {
 	masterFrequencyValue=1
     fi
 
-    echo $masterFrequency $masterFrequencyValue
     if [[ (( "$masterFrequency" == "weekly" ) && ( $(date "+%u") -eq "$masterFrequencyValue" )) || \
 	      (( "$masterFrequency" == "monthly" ) && ( $(date "+%d") -eq "$masterFrequencyValue" )) ]]
     then
