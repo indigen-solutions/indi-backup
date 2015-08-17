@@ -36,6 +36,7 @@ function ib_task_tarball-incremental_run() {
     local storageName=$(ib_get_conf_value "IB_TASK_${taskName}_STORAGE")
     local masterFrequency=$(ib_get_conf_value "IB_TASK_data2_MASTER_FREQUENCY")
     local masterFrequencyValue=$(ib_get_conf_value "IB_TASK_data2_MASTER_FREQUENCY_VALUE")
+    local masterTag=""
 
     if [ -z "$storageName" ]; then echo "No valid IB_TASK_${taskName}_STORAGE found"; return -1; fi
     if [ -z "$listFile" ]; then echo "No valid IB_TASK_${taskName}_LIST_FILE found"; return -1; fi
@@ -61,8 +62,9 @@ function ib_task_tarball-incremental_run() {
 	      (( "$masterFrequency" == "monthly" ) && ( $(date "+%d") -eq "$masterFrequencyValue" )) ]]
     then
 	rm -f "$listFile"
+        masterTag="master"
     fi
 
     tar --create -z --listed-incremental=$listFile $folders \
-	| ib_storage_run $storageName $taskName "${fileBaseName}-${DATE}.tar.gz"
+	| ib_storage_run $storageName $taskName "${fileBaseName}-${DATE}.tar.gz" "${masterTag}"
 }
