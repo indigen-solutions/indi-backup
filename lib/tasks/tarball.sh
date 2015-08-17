@@ -43,5 +43,8 @@ function ib_task_tarball_run() {
     if [ -z "$folders" ]; then echo "No valid IB_TASK_${taskName}_FOLDERS found"; return -1; fi
     if [ -z "$storageName" ]; then echo "No valid IB_TASK_${taskName}_STORAGE found"; return -1; fi
 
-    tar --create --absolute-names -z $folders | ib_storage_run $storageName $taskName "${fileBaseName}-${DATE}.tar.gz"
+    tar --create --absolute-names -z $folders | ib_storage_run $storageName $taskName "${fileBaseName}-${DATE}.tar.gz" \
+      || return -1
+
+    return 0
 }
