@@ -35,6 +35,7 @@ function ib_storage_ssh_run() {
     local storageName="$1"
     local taskName="$2"
     local itemName="$3"
+    local itemTag="$4"
     local sshUser=$(ib_get_conf_value "IB_STORAGE_${storageName}_USER")
     local sshHost=$(ib_get_conf_value "IB_STORAGE_${storageName}_HOST")
     local sshPort=$(ib_get_conf_value "IB_STORAGE_${storageName}_PORT")
@@ -58,7 +59,13 @@ function ib_storage_ssh_run() {
 	sshKey="-i ${sshKey}"
     fi
 
-    local fileName="${sshBasePath}/${taskName}/${DATE}/${itemName}"
+    local folderName="${DATE}"
+    if [ ! -z "$itemTag" ]
+    then
+	folderName="${folderName}-${itemTag}"
+    fi
+
+    local fileName="${sshBasePath}/${taskName}/${folderName}/${itemName}"
     ssh "${sshUser}@${sshHost}" $sshKey -p "${sshPort}" \
 	"mkdir -p \"\$(dirname '${fileName}')\" ; cat > '${fileName}'"
 }

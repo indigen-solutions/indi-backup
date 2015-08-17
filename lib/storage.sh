@@ -34,6 +34,7 @@ function ib_storage_run () {
     local storageName="$1"
     local taskName="$2"
     local itemName="$3"
+    local itemTag="$4"
 
     for storage in $IB_STORAGES
     do
@@ -42,13 +43,13 @@ function ib_storage_run () {
 	    local storageType=$(ib_get_conf_value "IB_STORAGE_${storageName}_TYPE")
 	    case "$storageType" in
 		swift)
-		    ib_storage_swift_run "$storageName" "$taskName" "$itemName" || return -1
+		    ib_storage_swift_run "$storageName" "$taskName" "$itemName" "$itemTag" || return -1
 		    ;;
 		fs)
-		    ib_storage_fs_run "$storageName" "$taskName" "$itemName" || return -1
+		    ib_storage_fs_run "$storageName" "$taskName" "$itemName" "$itemTag" || return -1
 		    ;;
 		ssh)
-		    ib_storage_ssh_run "$storageName" "$taskName" "$itemName" || return -1
+		    ib_storage_ssh_run "$storageName" "$taskName" "$itemName" "$itemTag" || return -1
 		    ;;
 		*)
 		    echo "Unknow storage type [$storageType]"
