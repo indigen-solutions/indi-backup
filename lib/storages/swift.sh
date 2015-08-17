@@ -35,6 +35,7 @@ function ib_storage_swift_run () {
     local storageName="$1"
     local taskName="$2"
     local itemName="$3"
+    local itemTag="$4"
     local swiftAuthUrl=$(ib_get_conf_value "IB_STORAGE_${storageName}_AUTHURL")
     local swiftUser=$(ib_get_conf_value "IB_STORAGE_${storageName}_USER")
     local swiftPassword=$(ib_get_conf_value "IB_STORAGE_${storageName}_PASSWORD")
@@ -53,6 +54,12 @@ function ib_storage_swift_run () {
 	swiftSplitSize="2G"
     fi
 
+    local folderName="${DATE}"
+    if [ ! -z "$itemTag" ]
+    then
+	folderName="${folderName}-${itemTag}"
+    fi
+
     stdin2swift -a "$swiftAuthUrl" -u "$swiftUser" -p "$swiftPassword" -s "$swiftSplitSize" \
-		"$swiftContainer" "${swiftBasePath}/${taskName}/${DATE}/${itemName}"
+		"$swiftContainer" "${swiftBasePath}/${taskName}/${folderName}/${itemName}"
 }

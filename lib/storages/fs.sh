@@ -35,6 +35,7 @@ function ib_storage_fs_run() {
     local storageName="$1"
     local taskName="$2"
     local itemName="$3"
+    local itemTag="$4"
     local fsBasePath=$(ib_get_conf_value "IB_STORAGE_${storageName}_BASEPATH")
 
     if [ -z "$fsBasePath" ]
@@ -43,7 +44,13 @@ function ib_storage_fs_run() {
 	return -1
     fi
 
-    local fileName="${fsBasePath}/${taskName}/${DATE}/${itemName}"
+    local folderName="${DATE}"
+    if [ ! -z "$itemTag" ]
+    then
+	folderName="${folderName}-${itemTag}"
+    fi
+
+    local fileName="${fsBasePath}/${taskName}/${folderName}/${itemName}"
     mkdir -p $(dirname "$fileName")
     cat > "${fileName}"
 }
