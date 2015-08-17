@@ -48,12 +48,13 @@ function ib_task_docker-mysql-dumper_run() {
 
     local tempDir=$(mktemp -qd --tmpdir="$tmpDir")
 
-    docker run -it --rm -v "${dockerSocket}:/var/run/docker.sock" -v "${tempDir}:/mnt" indigen/mysql-dumper backups
+    docker run -it --rm -v "${dockerSocket}:/var/run/docker.sock" -v "${tempDir}:/mnt" indigen/mysql-dumper backups || return -1
 
     for file in $(ls "$tempDir/backups")
     do
 	cat "$tempDir/backups/$file" | \
-	    ib_storage_run "$storageName" "$taskName" "${DATE}-${file}"
+	    ib_storage_run "$storageName" "$taskName" "${DATE}-${file}" || return -1
     done
     rm -rf "$tempDir"
+    return 0
 }
