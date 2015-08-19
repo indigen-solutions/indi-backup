@@ -1,3 +1,9 @@
+indi-backup (0.2.1-8-g13943c2) unstable; urgency=medium
+
+  * Release 0.2.1-8-g13943c2
+
+ -- Jérôme Quéré <jerome.quere@indigen.com>  Wed, 19 Aug 2015 15:30:37 +0200
+
 indi-backup (0.2-6-gfd2b0d8) unstable; urgency=medium
 
   * Release 0.2-6-gfd2b0d8
