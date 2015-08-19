@@ -48,7 +48,7 @@ function ib_task_docker-mysql-dumper_run() {
 
     local tempDir=$(mktemp -qd --tmpdir="$tmpDir")
 
-    docker run -it --rm -v "${dockerSocket}:/var/run/docker.sock" -v "${tempDir}:/mnt" indigen/mysql-dumper backups || return -1
+    docker run --rm -v "${dockerSocket}:/var/run/docker.sock" -v "${tempDir}:/mnt" indigen/mysql-dumper backups || return -1
 
     for file in $(ls "$tempDir/backups")
     do
