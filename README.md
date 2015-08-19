@@ -6,8 +6,8 @@ A modular backup system write in bash with minimal dependencies.
 
 #### Debian / Ubuntu
 ```
-wget 'https://github.com/indigen-solutions/indi-backup/releases/download/v0.2/indi-backup_0.2-6-gfd2b0d8_all.deb'
-sudo dpkg -i indi-backup_0.2-6-gfd2b0d8_all.deb
+wget 'https://github.com/indigen-solutions/indi-backup/releases/download/v0.2.1/indi-backup_0.2.1-8-g13943c2_all.deb'
+sudo dpkg -i indi-backup_0.2.1-8-g13943c2_all.deb
 ```
 
 #### Other linux distributions
