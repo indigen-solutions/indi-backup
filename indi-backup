@@ -141,7 +141,10 @@ fi
 #
 # Run task
 #
+error=0
 for task in $TASKS
 do
-    ib_task_run $task;
+    ib_task_run $task || error=1
 done
+
+exit $error
