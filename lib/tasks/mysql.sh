@@ -62,7 +62,7 @@ function ib_task_mysql_run() {
 
         mysqldump -h "$mysqlHost" --port "$mysqlPort" -u "$mysqlUser" "-p$mysqlPassword" \
               $mysqlDumpOpts "$database" | gzip | \
-            ib_storage_run "$storageName" "$taskName" "${database}-${DATE}.sql.gz"
+            ib_storage_run "$storageName" "$taskName" "${database}-${DATE}.sql.gz" || return -1
     done
     return 0;
 }

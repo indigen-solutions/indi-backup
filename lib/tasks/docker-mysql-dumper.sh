@@ -46,7 +46,8 @@ function ib_task_docker-mysql-dumper_run() {
 
     for file in $(ls "$tempDir/backups")
     do
-	    cat "$tempDir/backups/$file" | ib_storage_run "$storageName" "$taskName" "${DATE}-${file}"
+	    cat "$tempDir/backups/$file" | ib_storage_run "$storageName" "$taskName" "${DATE}-${file}" || return -1
     done
     rm -rf "$tempDir"
+    return 0
 }

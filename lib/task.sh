@@ -66,7 +66,11 @@ function ib_task_run() {
                 return -1
                 ;;
             esac
-            ib_storage_prune "$storageName" "$taskName" "$taskRetention" || return -1
+
+            if [ ! -z "$storageName" ]
+            then
+              ib_storage_prune "$storageName" "$taskName" "$taskRetention" || return -1
+            fi
             echo "Task ${taskName} success"
             return 0
         fi

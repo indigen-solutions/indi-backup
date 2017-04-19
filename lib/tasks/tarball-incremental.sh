@@ -55,5 +55,6 @@ function ib_task_tarball-incremental_run() {
     fi
 
     tar --create -z --listed-incremental=$listFile $folders \
-	| ib_storage_run $storageName $taskName "${fileBaseName}-${DATE}.tar.gz" "${masterTag}"
+	| ib_storage_run $storageName $taskName "${fileBaseName}-${DATE}.tar.gz" "${masterTag}" || return -1
+	return 0
 }

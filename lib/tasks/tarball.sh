@@ -35,10 +35,11 @@ function ib_task_tarball_run() {
     local fileBaseName=$(ib_get_conf_value "IB_TASK_${taskName}_FILE_BASENAME")
     local storageName=$(ib_get_conf_value "IB_TASK_${taskName}_STORAGE")
 
-    if [ -z "$fileBaseName" ]; then fileBaseName="backup"; fi
+    [ -z "$fileBaseName" ] && fileBaseName="backup"
 
-    if [ -z "$folders" ]; then echo "No valid IB_TASK_${taskName}_FOLDERS found"; return -1; fi
-    if [ -z "$storageName" ]; then echo "No valid IB_TASK_${taskName}_STORAGE found"; return -1; fi
+    [ -z "$folders" ] && echo "No valid IB_TASK_${taskName}_FOLDERS found" && return -1
+    [ -z "$storageName" ] && echo "No valid IB_TASK_${taskName}_STORAGE found" && return -1
 
-    tar --create --absolute-names -z $folders | ib_storage_run $storageName $taskName "${fileBaseName}-${DATE}.tar.gz"
+    tar --create --absolute-names -z $folders | ib_storage_run $storageName $taskName "${fileBaseName}-${DATE}.tar.gz" || return -1
+    return 0
 }
