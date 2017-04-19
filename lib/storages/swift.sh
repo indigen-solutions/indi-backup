@@ -43,6 +43,8 @@ function ib_storage_swift_run () {
     local swiftContainer=$(ib_get_conf_value "IB_STORAGE_${storageName}_CONTAINER")
     local swiftSplitSize=$(ib_get_conf_value "IB_STORAGE_${storageName}_SPLIT_SIZE")
 
+    echo "WARNING: Swift storage is deprecated"
+
     if [ -z "$swiftAuthUrl" ]; then echo "No valid SWIFT_AUTHURL found"; return -1; fi
     if [ -z "$swiftUser" ]; then echo "No valid SWIFT_USER found"; return -1; fi
     if [ -z "$swiftPassword" ]; then echo "No valid SWIFT_PASSWORD found"; return -1; fi
@@ -62,4 +64,15 @@ function ib_storage_swift_run () {
 
     stdin2swift -a "$swiftAuthUrl" -u "$swiftUser" -p "$swiftPassword" -s "$swiftSplitSize" \
 		"$swiftContainer" "${swiftBasePath}/${taskName}/${folderName}/${itemName}"
+}
+
+##
+# This method remove backup older than retention
+# @param storageName The name of the storage stream to execute
+# @param taskName The name of the task to execute
+# @param retention The name of the item you want to store
+##
+function ib_storage_swift_prune() {
+    echo "WARNING: Prune on swift storage is not supported yet"
+    retrun 0
 }

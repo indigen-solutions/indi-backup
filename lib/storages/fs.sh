@@ -38,19 +38,33 @@ function ib_storage_fs_run() {
     local itemTag="$4"
     local fsBasePath=$(ib_get_conf_value "IB_STORAGE_${storageName}_BASEPATH")
 
-    if [ -z "$fsBasePath" ]
-    then
-	echo "No valid IB_STORAGE_${storageName}_BASEPATH found"
-	return -1
-    fi
+    [ -z "$fsBasePath" ] && echo "No valid IB_STORAGE_${storageName}_BASEPATH found" && return -1
 
     local folderName="${DATE}"
-    if [ ! -z "$itemTag" ]
-    then
-	folderName="${folderName}-${itemTag}"
-    fi
+    [ ! -z "$itemTag" ] && folderName="${folderName}-${itemTag}"
 
     local fileName="${fsBasePath}/${taskName}/${folderName}/${itemName}"
     mkdir -p $(dirname "$fileName")
     cat > "${fileName}"
+}
+
+##
+# This method remove backup older than retention
+# @param storageName The name of the storage stream to execute
+# @param taskName The name of the task to execute
+# @param retention The name of the item you want to store
+##
+function ib_storage_fs_prune() {
+    local storageName="$1"
+    local taskName="$2"
+    local retention="$3"
+    local fsBasePath=$(ib_get_conf_value "IB_STORAGE_${storageName}_BASEPATH")
+
+    [ -z "$fsBasePath" ] && echo "No valid IB_STORAGE_${storageName}_BASEPATH found" && return -1
+
+    for backup in $(ls "${fsBasePath}/${taskName}")
+    do
+        ib_should_be_prune "${backup}" "$retention" && rm -rf "${fsBasePath}/${taskName}/$backup"
+    done
+    return 0
 }

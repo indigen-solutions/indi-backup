@@ -34,6 +34,21 @@ function ib_get_conf_value() {
     return 0
 }
 
+##
+# This function return true if a given backup should be prune according to
+# retention policies
+# @param backup The backup name
+# @param retention the retention policy
+##
+function ib_should_be_prune() {
+    local backup="$1"
+    local retention="$2"
+
+    local retentionDate=$(date -d "now - ${retention}" --utc "+%Y%m%dT%H%M%SZ")
+    [ ${backup} \< ${retentionDate} ]
+    return $?
+}
+
 function ib_print_usage() {
     echo "USAGE"
     echo "  indi-backup [options] tasks ..."

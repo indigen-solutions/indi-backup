@@ -38,31 +38,20 @@ function ib_task_tarball-incremental_run() {
     local masterFrequencyValue=$(ib_get_conf_value "IB_TASK_data2_MASTER_FREQUENCY_VALUE")
     local masterTag=""
 
-    if [ -z "$storageName" ]; then echo "No valid IB_TASK_${taskName}_STORAGE found"; return -1; fi
-    if [ -z "$listFile" ]; then echo "No valid IB_TASK_${taskName}_LIST_FILE found"; return -1; fi
-    if [ -z "$folders" ]; then echo "No valid IB_TASK_${taskName}_FOLDERS found"; return -1; fi
+    [ -z "$storageName" ] && echo "No valid IB_TASK_${taskName}_STORAGE found" && return -1
+    [ -z "$listFile" ] && echo "No valid IB_TASK_${taskName}_LIST_FILE found" && return -1
+    [ -z "$folders" ] && echo "No valid IB_TASK_${taskName}_FOLDERS found" && return -1
 
-    if [ -z "$fileBaseName" ]
-    then
-	fileBaseName="backup"
-    fi
+    [ -z "$fileBaseName" ] && fileBaseName="backup"
 
-    if [ -z "$masterFrequency" ]
-    then
-	masterFrequency="weekly"
-	masterFrequencyValue=1
-    fi
-
-    if [ -z "$masterFrequencyValue" ]
-    then
-	masterFrequencyValue=1
-    fi
+    [ -z "$masterFrequency" ] && masterFrequency="weekly"
+    [ -z "$masterFrequencyValue" ] && masterFrequencyValue=1
 
     if [[ (( "$masterFrequency" == "weekly" ) && ( $(date "+%u") -eq "$masterFrequencyValue" )) || \
 	      (( "$masterFrequency" == "monthly" ) && ( $(date "+%d") -eq "$masterFrequencyValue" )) ]]
     then
-	rm -f "$listFile"
-        masterTag="master"
+        rm -f "$listFile"
+            masterTag="master"
     fi
 
     tar --create -z --listed-incremental=$listFile $folders \

@@ -63,13 +63,51 @@ function ib_storage_run () {
 }
 
 ##
+# This method remove backups older than retention from the storage
+# @param storageName The name of the storage stream to execute
+# @param taskName The name of the task to execute
+# @param retention The retention duration
+##
+function ib_storage_prune () {
+    local storageName="$1"
+    local taskName="$2"
+    local retention="$3"
+
+    for storage in $IB_STORAGES
+    do
+        if [[ "$storage" == "$storageName" ]]
+        then
+            local storageType=$(ib_get_conf_value "IB_STORAGE_${storageName}_TYPE")
+            case "$storageType" in
+            swift)
+                ib_storage_swift_prune "$storageName" "$taskName" "$retention" || return -1
+                ;;
+            fs)
+                ib_storage_fs_prune "$storageName" "$taskName" "$retention" || return -1
+                ;;
+            ssh)
+                ib_storage_ssh_prune "$storageName" "$taskName" "$retention" || return -1
+                ;;
+            *)
+                echo "Unknow storage type [$storageType]"
+                return -1
+                ;;
+            esac
+            return 0
+        fi
+    done
+    echo "No storage [$storageName] found"
+
+}
+
+##
 # This method list all the registered storage in the configuration file.
 ##
 function ib_storage_list() {
     for storageName in $IB_STORAGES
     do
-	local type=$(ib_get_conf_value "IB_STORAGE_${storageName}_TYPE")
-	echo " * ${storageName}"
-	echo "   - Type: ${type}"
+        local type=$(ib_get_conf_value "IB_STORAGE_${storageName}_TYPE")
+        echo " * ${storageName}"
+        echo "   - Type: ${type}"
     done
 }

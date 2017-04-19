@@ -38,36 +38,31 @@ function ib_task_mysql_run() {
     local mysqlDatabases=$(ib_get_conf_value "IB_TASK_${taskName}_DATABASES")
     local storageName=$(ib_get_conf_value "IB_TASK_${taskName}_STORAGE")
 
-    if [ -z "$mysqlHost" ];then mysqlHost="localhost"; fi
-    if [ -z "$mysqlPort" ];then mysqlPort="3306"; fi
-    if [ -z "$mysqlUser" ];then mysqlPort="root"; fi
-    if [ -z "$mysqlPassword" ];then mysqlPassword=""; fi
-    if [ -z "$mysqlDumpOpts" ];then mysqlDumpOpts="--opt"; fi
-    if [ -z "$mysqlDatabases" ];then mysqlDatabases="__ALL__"; fi
+    [ -z "$mysqlHost" ] && mysqlHost="localhost"
+    [ -z "$mysqlPort" ] && mysqlPort="3306"
+    [ -z "$mysqlUser" ] && mysqlPort="root"
+    [ -z "$mysqlPassword" ] && mysqlPassword=""
+    [ -z "$mysqlDumpOpts" ] && mysqlDumpOpts="--opt"
+    [ -z "$mysqlDatabases" ] && mysqlDatabases="__ALL__"
 
-    if [ -z "$storageName" ]; then echo "No valid IB_TASK_${taskName}_STORAGE found"; return -1; fi
+    [ -z "$storageName" ] && echo "No valid IB_TASK_${taskName}_STORAGE found" && return -1
 
     if [[ "$mysqlDatabases" ==  "__ALL__" ]]
     then
-	mysqlDatabases=$(mysql --batch --raw --skip-pager --skip-column-names -h "$mysqlHost" \
-			       --port "$mysqlPort" -u "$mysqlUser" "-p$mysqlPassword" \
-			       --execute='SHOW DATABASES')
-	if [ -z "$mysqlDatabases" ]
-	then
-	    echo "Can't list mysql databases on server [$mysqlHost]"
-	    return -1
-	fi
+        mysqlDatabases=$(mysql --batch --raw --skip-pager --skip-column-names -h "$mysqlHost" \
+                       --port "$mysqlPort" -u "$mysqlUser" "-p$mysqlPassword" \
+                       --execute='SHOW DATABASES')
+
+    	[ -z "$mysqlDatabases" ] && echo "Can't list mysql databases on server [$mysqlHost]" && return -1
     fi
 
     for database in $mysqlDatabases
     do
-	if [[ ($database == "information_schema") || ($database == "performance_schema") ]]
-	then
-	    continue;
-	fi
-	mysqldump -h "$mysqlHost" --port "$mysqlPort" -u "$mysqlUser" "-p$mysqlPassword" \
-		  $mysqlDumpOpts "$database" | gzip | \
-	    ib_storage_run "$storageName" "$taskName" "${database}-${DATE}.sql.gz"
+        [[ ($database == "information_schema") || ($database == "performance_schema") ]] && continue
+
+        mysqldump -h "$mysqlHost" --port "$mysqlPort" -u "$mysqlUser" "-p$mysqlPassword" \
+              $mysqlDumpOpts "$database" | gzip | \
+            ib_storage_run "$storageName" "$taskName" "${database}-${DATE}.sql.gz"
     done
     return 0;
 }

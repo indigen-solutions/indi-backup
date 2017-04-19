@@ -34,17 +34,11 @@ function ib_task_docker-mysql-dumper_run() {
     local storageName=$(ib_get_conf_value "IB_TASK_${taskName}_STORAGE")
     local tmpDir=$(ib_get_conf_value "IB_TASK_${taskName}_TMP_DIR")
 
-    if [ -z "$dockerSocket" ]
-    then
-	dockerSocket="/var/run/docker.sock"
-    fi
+    [ -z "$dockerSocket" ] && dockerSocket="/var/run/docker.sock"
 
-    if [ -z "$tmpDir" ]
-    then
-	tmpDir="/tmp"
-    fi
+    [ -z "$tmpDir" ] && tmpDir="/tmp"
 
-    if [ -z "$storageName" ]; then echo "No valid IB_TASK_${taskName}_STORAGE found"; return -1; fi
+    [ -z "$storageName" ] && echo "No valid IB_TASK_${taskName}_STORAGE found" && return -1
 
     local tempDir=$(mktemp -qd --tmpdir="$tmpDir")
 
@@ -52,8 +46,7 @@ function ib_task_docker-mysql-dumper_run() {
 
     for file in $(ls "$tempDir/backups")
     do
-	cat "$tempDir/backups/$file" | \
-	    ib_storage_run "$storageName" "$taskName" "${DATE}-${file}"
+	    cat "$tempDir/backups/$file" | ib_storage_run "$storageName" "$taskName" "${DATE}-${file}"
     done
     rm -rf "$tempDir"
 }

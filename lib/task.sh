@@ -37,33 +37,39 @@ function ib_task_run() {
     echo "Starting task ${taskName}"
     for task in $IB_TASKS
     do
-	if [[ "$task" == "$taskName" ]]
-	then
-	    local taskType=$(ib_get_conf_value "IB_TASK_${taskName}_TYPE")
-	    case  "$taskType" in
-		subtask)
-		    ib_task_subtask_run "$taskName" || return -1
-		    ;;
-		mysql)
-		    ib_task_mysql_run "$taskName" || return -1
-		    ;;
-		tarball)
-		    ib_task_tarball_run "$taskName" || return -1
-		    ;;
-		tarball-incremental)
-		    ib_task_tarball-incremental_run "$taskName" || return -1
-		    ;;
-		docker-mysql-dumper)
-		    ib_task_docker-mysql-dumper_run "$taskName" || return -1
-		    ;;
-		*)
-		    echo "Unknow task type [$taskType]"
-		    return -1
-		    ;;
-	    esac
-	    echo "Task ${taskName} success"
-	    return 0
-	fi
+        if [[ "$task" == "$taskName" ]]
+        then
+            local taskType=$(ib_get_conf_value "IB_TASK_${taskName}_TYPE")
+            local taskRetention=$(ib_get_conf_value "IB_TASK_${taskName}_RETENTION")
+            local storageName=$(ib_get_conf_value "IB_TASK_${taskName}_STORAGE")
+
+            if [ -z "$taskRetention" ];then taskRetention="15days"; fi
+
+            case  "$taskType" in
+            subtask)
+                ib_task_subtask_run "$taskName" || return -1
+                ;;
+            mysql)
+                ib_task_mysql_run "$taskName" || return -1
+                ;;
+            tarball)
+                ib_task_tarball_run "$taskName" || return -1
+                ;;
+            tarball-incremental)
+                ib_task_tarball-incremental_run "$taskName" || return -1
+                ;;
+            docker-mysql-dumper)
+                ib_task_docker-mysql-dumper_run "$taskName" || return -1
+                ;;
+            *)
+                echo "Unknow task type [$taskType]"
+                return -1
+                ;;
+            esac
+            ib_storage_prune "$storageName" "$taskName" "$taskRetention" || return -1
+            echo "Task ${taskName} success"
+            return 0
+        fi
     done
     echo "No task [$taskName] found"
     return -1;

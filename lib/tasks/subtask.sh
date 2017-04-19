@@ -32,14 +32,11 @@ function ib_task_subtask_run() {
     local taskName="$1";
     local subtasks=$(ib_get_conf_value "IB_TASK_${taskName}_SUBTASKS")
 
-    if [ -z "$subtasks" ]; then echo "No valid IB_TASK_${taskName}_SUBTASKS found"; return -1; fi
+    [ -z "$subtasks" ] && "No valid IB_TASK_${taskName}_SUBTASKS found" && return -1
 
     for subtask in $subtasks
     do
-	if ! ib_task_run $subtask
-	then
-	    return -1;
-	fi
+        ! ib_task_run $subtask && return -1
     done
     return 0;
 }

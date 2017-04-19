@@ -35,10 +35,7 @@ function ib_task_tarball_run() {
     local fileBaseName=$(ib_get_conf_value "IB_TASK_${taskName}_FILE_BASENAME")
     local storageName=$(ib_get_conf_value "IB_TASK_${taskName}_STORAGE")
 
-    if [ -z "$fileBaseName" ]
-    then
-	fileBaseName="backup"
-    fi
+    if [ -z "$fileBaseName" ]; then fileBaseName="backup"; fi
 
     if [ -z "$folders" ]; then echo "No valid IB_TASK_${taskName}_FOLDERS found"; return -1; fi
     if [ -z "$storageName" ]; then echo "No valid IB_TASK_${taskName}_STORAGE found"; return -1; fi
