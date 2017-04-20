@@ -49,6 +49,9 @@ function ib_task_run() {
             subtask)
                 ib_task_subtask_run "$taskName" || return -1
                 ;;
+            mongo)
+                ib_task_mongo_run "$taskName" || return -1
+                ;;
             mysql)
                 ib_task_mysql_run "$taskName" || return -1
                 ;;

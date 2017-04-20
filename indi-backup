@@ -44,6 +44,7 @@ source $IB_LIB_DIR/utils.sh
 
 source $IB_LIB_DIR/task.sh
 source $IB_LIB_DIR/tasks/docker-mysql-dumper.sh
+source $IB_LIB_DIR/tasks/mongo.sh
 source $IB_LIB_DIR/tasks/mysql.sh
 source $IB_LIB_DIR/tasks/subtask.sh
 source $IB_LIB_DIR/tasks/tarball.sh

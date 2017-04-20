@@ -25,37 +25,40 @@
 ################################################################################
 
 ##
-# This method execute a task of type "tarball-incremental"
+# This method execute a task of type "mysql"
 # @param taskName The name of the task to execute
 ##
-function ib_task_tarball-incremental_run() {
-    local taskName="$1"
-    local folders=$(ib_get_conf_value "IB_TASK_${taskName}_FOLDERS")
-    local listFile=$(ib_get_conf_value "IB_TASK_${taskName}_LIST_FILE")
-    local fileBaseName=$(ib_get_conf_value "IB_TASK_${taskName}_FILE_BASENAME")
+function ib_task_mongo_run() {
+    local taskName="$1";
+    local host=$(ib_get_conf_value "IB_TASK_${taskName}_HOST")
+    local port=$(ib_get_conf_value "IB_TASK_${taskName}_PORT")
+    local user=$(ib_get_conf_value "IB_TASK_${taskName}_USER")
+    local password=$(ib_get_conf_value "IB_TASK_${taskName}_PASSWORD")
+    local databases=$(ib_get_conf_value "IB_TASK_${taskName}_DATABASES")
     local storageName=$(ib_get_conf_value "IB_TASK_${taskName}_STORAGE")
-    local masterFrequency=$(ib_get_conf_value "IB_TASK_data2_MASTER_FREQUENCY")
-    local masterFrequencyValue=$(ib_get_conf_value "IB_TASK_data2_MASTER_FREQUENCY_VALUE")
-    local masterTag=""
+
+    [ -z "$databases" ] && databases="__ALL__"
 
     [ -z "$storageName" ] && echo "No valid IB_TASK_${taskName}_STORAGE found" && return -1
-    [ -z "$listFile" ] && echo "No valid IB_TASK_${taskName}_LIST_FILE found" && return -1
-    [ -z "$folders" ] && echo "No valid IB_TASK_${taskName}_FOLDERS found" && return -1
 
-    [ -z "$fileBaseName" ] && fileBaseName="backup"
+    local options=""
+    [ ! -z "$host" ] && options="${options} --host=${host}"
+    [ ! -z "$port" ] && options="${options} --port=${port}"
+    [ ! -z "$user" ] && options="${options} --username=${user}"
+    [ ! -z "$password" ] && options="${options} --password=${password}"
 
-    [ -z "$masterFrequency" ] && masterFrequency="weekly"
-    [ -z "$masterFrequencyValue" ] && masterFrequencyValue=1
 
-    if [[ (( "$masterFrequency" == "weekly" ) && ( $(date "+%u") -eq "$masterFrequencyValue" )) || \
-	      (( "$masterFrequency" == "monthly" ) && ( $(date "+%d") -eq "$masterFrequencyValue" )) || \
-	      ( ! -f  "$listFile" ) ]]
+    if [[ "$databases" ==  "__ALL__" ]]
     then
-        rm -f "$listFile"
-            masterTag="master"
+         mongodump $options --archive --gzip |
+            ib_storage_run "$storageName" "$taskName" "${taskName}-${DATE}.archive.gz" || return -1
+         return 0
     fi
 
-    tar --create -z --listed-incremental=$listFile $folders \
-	| ib_storage_run $storageName $taskName "${fileBaseName}-${DATE}.tar.gz" "${masterTag}" || return -1
-	return 0
+    for database in $databases
+    do
+        mongodump $options --db="$database" --archive --gzip |
+            ib_storage_run "$storageName" "$taskName" "${database}-${DATE}.archive.gz" || return -1
+    done
+    return 0;
 }
