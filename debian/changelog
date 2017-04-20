@@ -1,0 +1,29 @@
+indi-backup (0.3.0-0-g88068b7) unstable; urgency=medium
+
+  * Release 0.3.0-0-g88068b7
+
+ -- Jerome Quere <jerome.quere@indigen.com>  Thu, 20 Apr 2017 17:30:22 +0000
+
+indi-backup (0.2.1-8-g13943c2) unstable; urgency=medium
+
+  * Release 0.2.1-8-g13943c2
+
+ -- Jérôme Quéré <jerome.quere@indigen.com>  Thu, 20 Apr 2017 17:03:22 +0000
+
+indi-backup (0.2-6-gfd2b0d8) unstable; urgency=medium
+
+  * Release 0.2-6-gfd2b0d8
+
+ -- Jérôme Quéré <jerome.quere@indigen.com>  Mon, 17 Aug 2015 21:28:40 +0200
+
+indi-backup (0.1-4-g955aa64) unstable; urgency=medium
+
+  * Release 0.1-4-g955aa64
+
+ -- Jérôme Quéré <jerome.quere@indigen.com>  Fri, 14 Aug 2015 23:00:46 +0200
+
+indi-backup (0.1-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Jérôme Quéré <jerome.quere@indigen.com>  Tue, 11 Aug 2015 21:03:19 +0200

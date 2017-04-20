@@ -1,0 +1,16 @@
+Source: indi-backup
+Section: utils
+Priority: optional
+Maintainer: Jerome Quere <jerome.quere@indigen.com>
+Build-Depends: debhelper (>= 9)
+Standards-Version:  3.9.6
+Vcs-Git: https://github.com/indigen-solutions/indi-backup.git
+Vcs-Browser: https://github.com/indigen-solutions/indi-backup
+
+Package: indi-backup
+Architecture: all
+Depends: ${misc:Depends}
+Suggests: stdin2swift, mysql-client
+Description: Modular backup system write in bash with minimal dependency.
+ Full documentation available here:
+ (https://github.com/indigen-solutions/indi-backup/wiki).
