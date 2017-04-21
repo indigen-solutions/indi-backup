@@ -34,6 +34,7 @@ function ib_task_mongo_run() {
     local port=$(ib_get_conf_value "IB_TASK_${taskName}_PORT")
     local user=$(ib_get_conf_value "IB_TASK_${taskName}_USER")
     local password=$(ib_get_conf_value "IB_TASK_${taskName}_PASSWORD")
+    local dumpOpts=$(ib_get_conf_value "IB_TASK_${taskName}_DUMP_OPTS")
     local databases=$(ib_get_conf_value "IB_TASK_${taskName}_DATABASES")
     local storageName=$(ib_get_conf_value "IB_TASK_${taskName}_STORAGE")
 
@@ -41,7 +42,7 @@ function ib_task_mongo_run() {
 
     [ -z "$storageName" ] && echo "No valid IB_TASK_${taskName}_STORAGE found" && return -1
 
-    local options=""
+    local options="${dumpOpts}"
     [ ! -z "$host" ] && options="${options} --host=${host}"
     [ ! -z "$port" ] && options="${options} --port=${port}"
     [ ! -z "$user" ] && options="${options} --username=${user}"
