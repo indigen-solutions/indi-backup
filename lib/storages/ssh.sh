@@ -95,6 +95,6 @@ function ib_storage_ssh_prune() {
         ib_should_be_prune "${backup}" "$retention" && toRemove="${toRemove} \"${dirName}/${backup}\""
     done
 
-    ssh $sshKey -p "${sshPort}" "${sshUser}@${sshHost}" "rm -r ${toRemove}"
+    [ ! -z "$toRemove" ] && ssh $sshKey -p "${sshPort}" "${sshUser}@${sshHost}" "rm -r ${toRemove}"
     return 0
 }
