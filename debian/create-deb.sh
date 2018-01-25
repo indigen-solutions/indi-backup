@@ -10,12 +10,13 @@ DEBEMAIL=$DEBEMAIL dch -r $VERSION
 tar -cJf ../${SOURCE}_${SHORT_VERSION}.orig.tar.xz *
 
 debuild
-debuild clean
 
 rm -f ../${SOURCE}_${VERSION}*.build
 rm -f ../${SOURCE}_${VERSION}*.changes
 rm -f ../${SOURCE}_${VERSION}*.tar.xz
 rm -f ../${SOURCE}_${VERSION}*.dsc
 rm -f ../${SOURCE}_${SHORT_VERSION}.orig.tar.xz
+mv  ../${SOURCE}_${VERSION}_all.deb .
 
-popd > /dev/null
+
+debuild -- clean

@@ -1,3 +1,9 @@
+indi-backup (0.3.3-0-gc4d87b2) unstable; urgency=medium
+
+  * Release 0.3.3-0-gc4d87b2
+
+ -- Jerome Quere <jerome.quere@indigen.com>  Thu, 25 Jan 2018 17:04:25 +0000
+
 indi-backup (0.3.1-0-gd363938) unstable; urgency=medium
 
   * Release 0.3.1-0-gd363938
